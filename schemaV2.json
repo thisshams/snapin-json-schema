@@ -1,0 +1,814 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "$defs": {
+        "Name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 60,
+            "pattern": "^[a-zA-Z0-9_]+$"
+        },
+        "Description": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 300
+        },
+        "keyring_properties": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "$ref": "#/$defs/Name"
+                    },
+                    "display_name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "$ref": "#/$defs/Description"
+                    },
+                    "types": {
+                        "type": "array",
+                        "uniqueItems": true,
+                        "items": {
+                            "type": "string",
+                            "enum": [
+                                "devrev-github-pat",
+                                "devrev-github-oauth",
+                                "devrev-bitbucket-oauth",
+                                "devrev-gitlab-pat",
+                                "devrev-stripe-token",
+                                "devrev-sendgrid-api-key",
+                                "devrev-clearbit-api-key",
+                                "devrev-flow-secret",
+                                "devrev-datadog-keys",
+                                "devrev-slack-app",
+                                "devrev-discord-app",
+                                "devrev-google-oauth",
+                                "devrev-domain-verification",
+                                "devrev-intercom-oauth",
+                                "devrev-pat",
+                                "devrev-gcp-json",
+                                "devrev-jira-oauth",
+                                "devrev-confluence-oauth",
+                                "devrev-google-calendar-oauth"
+                            ]
+                        }
+                    }
+                },
+                "required": [
+                    "name",
+                    "display_name",
+                    "description",
+                    "types"
+                ]
+            }
+        },
+        "inputs_properties": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "$ref": "#/$defs/Name"
+                    },
+                    "description": {
+                        "$ref": "#/$defs/Description"
+                    },
+                    "field_type": {
+                        "type": "string",
+                        "description": "Type of input to be taken.",
+                        "enum": [
+                            "bool",
+                            "int",
+                            "text",
+                            "tokens",
+                            "[]tokens",
+                            "enum",
+                            "[]enum",
+                            "id",
+                            "[]id"
+                        ]
+                    },
+                    "is_required": {
+                        "type": "bool"
+                    },
+                    "default_value": {
+                        "type": [
+                            "string",
+                            "number",
+                            "bool"
+                        ]
+                    },
+                    "ui": {
+                        "type": "object",
+                        "properties": {
+                            "display_name": {
+                                "type": "string"
+                            },
+                            "placeholder": {
+                                "type": "string"
+                            },
+                            "is_hidden": {
+                                "type": "boolean"
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "display_name",
+                            "placeholder"
+                        ]
+                    },
+                    "enum": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "id_type": {
+                        "items": {
+                            "type": "string",
+                            "enum": [
+                                "product",
+                                "feature",
+                                "enhancement",
+                                "capability",
+                                "devu",
+                                "tag"
+                            ]
+                        },
+                        "type": "array",
+                        "uniqueItems": true
+                    }
+                },
+                "required": [
+                    "name",
+                    "field_type",
+                    "description",
+                    "ui"
+                ],
+                "allOf": [
+                    {
+                        "if": {
+                            "properties": {
+                                "field_type": {
+                                    "const": "enum"
+                                }
+                            }
+                        },
+                        "then": {
+                            "required": [
+                                "enum"
+                            ]
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "field_type": {
+                                    "const": "[]enum"
+                                }
+                            }
+                        },
+                        "then": {
+                            "required": [
+                                "enum"
+                            ]
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "field_type": {
+                                    "const": "id"
+                                }
+                            }
+                        },
+                        "then": {
+                            "required": [
+                                "id_type"
+                            ]
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "field_type": {
+                                    "const": "[]id"
+                                }
+                            }
+                        },
+                        "then": {
+                            "required": [
+                                "id_type"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        "event_sources_properties": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "$ref": "#/$defs/Name"
+                    },
+                    "description": {
+                        "$ref": "#/$defs/Description"
+                    },
+                    "display_name": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "Events you want to listen to",
+                        "enum": [
+                            "github-webhook",
+                            "bitbucket-webhook",
+                            "gitlab-webhook",
+                            "circleci-webhook",
+                            "stripe-webhook",
+                            "devrev-events",
+                            "devrev-webhook",
+                            "flow-events",
+                            "timer-events",
+                            "flow-custom-webhook",
+                            "betteruptime-incident-webhook",
+                            "email-forward",
+                            "slack-app-commands",
+                            "slack-app-events",
+                            "slack-app-interactions",
+                            "slack-app-message-actions",
+                            "discord-app-interactions",
+                            "datadog-monitor-events"
+                        ]
+                    },
+                    "repositories": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "events": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "workspace_id": {
+                        "type": "string"
+                    },
+                    "event_types": {
+                        "items": {
+                            "type": "string",
+                            "enum": [
+                                "account_created",
+                                "account_deleted",
+                                "account_updated",
+                                "conversation_created",
+                                "conversation_deleted",
+                                "conversation_updated",
+                                "dev_user_created",
+                                "dev_user_deleted",
+                                "dev_user_updated",
+                                "part_created",
+                                "part_deleted",
+                                "part_updated",
+                                "rev_org_created",
+                                "rev_org_deleted",
+                                "rev_org_updated",
+                                "rev_user_created",
+                                "rev_user_deleted",
+                                "rev_user_updated",
+                                "tag_created",
+                                "tag_deleted",
+                                "tag_updated",
+                                "timeline_entry_created",
+                                "timeline_entry_deleted",
+                                "timeline_entry_updated",
+                                "verify",
+                                "webhook_created",
+                                "webhook_deleted",
+                                "webhook_updated",
+                                "work_created",
+                                "work_deleted",
+                                "work_updated"
+                            ]
+                        },
+                        "type": "array"
+                    },
+                    "cron": {
+                        "type": "string",
+                        "description": "Cron schedule for the timer. Only minute granularity supported."
+                    },
+                    "interval_seconds": {
+                        "type": "integer"
+                    },
+                    "metadata": {
+                        "type": "object",
+                        "description": "Optional json metadata which is set as the 'metadata' field of the event payload."
+                    },
+                    "Policy": {
+                        "type": "string"
+                    },
+                    "Parameters": {
+                        "type": "object"
+                    },
+                    "whitelist": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "handler_code": {
+                        "type": "string"
+                    },
+                    "monitors": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "description": "IDs of the monitors to register for events"
+                    }
+                },
+                "required": [
+                    "name",
+                    "type",
+                    "description",
+                    "display_name"
+                ],
+                "allOf": [
+                    {
+                        "if": {
+                            "properties": {
+                                "type": {
+                                    "const": "github-webhook"
+                                }
+                            }
+                        },
+                        "then": {
+                            "required": [
+                                "repositories",
+                                "events"
+                            ]
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "type": {
+                                    "const": "bitbucket-webhook"
+                                }
+                            }
+                        },
+                        "then": {
+                            "required": [
+                                "workspace_id"
+                            ]
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "type": {
+                                    "const": "gitlab-webhook"
+                                }
+                            }
+                        },
+                        "then": {
+                            "required": [
+                                "repositories",
+                                "events"
+                            ]
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "type": {
+                                    "const": "devrev-webhook"
+                                }
+                            }
+                        },
+                        "then": {
+                            "required": [
+                                "event_types"
+                            ]
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "type": {
+                                    "const": "flow-custom-webhook"
+                                }
+                            }
+                        },
+                        "then": {
+                            "required": [
+                                "Policy",
+                                "Parameters"
+                            ]
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "type": {
+                                    "const": "email-forward"
+                                }
+                            }
+                        },
+                        "then": {
+                            "required": [
+                                "whitelist"
+                            ]
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "type": {
+                                    "const": "slack-app-commands"
+                                }
+                            }
+                        },
+                        "then": {
+                            "required": [
+                                "handler_code"
+                            ]
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "type": {
+                                    "const": "slack-app-interactions"
+                                }
+                            }
+                        },
+                        "then": {
+                            "required": [
+                                "handler_code"
+                            ]
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "type": {
+                                    "const": "slack-app-message-actions"
+                                }
+                            }
+                        },
+                        "then": {
+                            "required": [
+                                "handler_code"
+                            ]
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "type": {
+                                    "const": "datadog-monitor-events"
+                                }
+                            }
+                        },
+                        "then": {
+                            "required": [
+                                "monitors"
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "properties": {
+        "version": {
+            "type": "string",
+            "description": "The version specifies the manifest version.\n Reference: https://docs.devrev.ai/snap-ins/references/manifest#version",
+            "default": "2",
+            "enum": [
+                "2"
+            ]
+        },
+        "name": {
+            "type": "string",
+            "description": "Name of the snap-in.\n Reference: https://docs.devrev.ai/snap-ins/references/manifest"
+        },
+        "description": {
+            "type": "string",
+            "description": "Description of the snap-in.\n Reference: https://docs.devrev.ai/snap-ins/references/manifest"
+        },
+        "service_account": {
+            "type": "object",
+            "description": "Bot provided by DevRev, to perform actions on DevRev.\n Reference: https://docs.devrev.ai/snap-ins/references/manifest",
+            "properties": {
+                "display_name": {
+                    "tyoe": "string",
+                    "description": "Name of the Service Account"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Service account to be used by the snap-in"
+                }
+            },
+            "additionalProperties": false
+        },
+        "functions": {
+            "type": "array",
+            "description": "Using functions, you can provide custom code and link it to your event sources, automations, or snap-kit actions.\nFunctions are written in JavaScript and can be used to transform events, send notifications, or perform any other custom logic including network calls.\nReference: https://docs.devrev.ai/snap-ins/references/functions",
+            "minItems": 1,
+            "maxItems": 5,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "$ref": "#/$defs/Name"
+                    },
+                    "description": {
+                        "$ref": "#/$defs/Description"
+                    }
+                },
+                "required": [
+                    "name",
+                    "description"
+                ],
+                "additionalProperties": false
+            }
+        },
+        "keyrings": {
+            "type": "object",
+            "description": "Keyrings are a way to authenticate with external services. They're defined in the snap-in manifest under the keyrings section.\nReference: https://docs.devrev.ai/snap-ins/references/keyrings\n",
+            "properties": {
+                "organization": {
+                    "$ref": "#/$defs/keyring_properties"
+                },
+                "user": {
+                    "$ref": "#/$defs/keyring_properties"
+                }
+            }
+        },
+        "inputs": {
+            "type": "object",
+            "description": "Inputs are settings for a snap-in that allows behavior customization. They're scoped to either an organization or a user. \nOrganization-scoped inputs remain common for the organization, while user-scoped settings need to be set for each user. \nEach input's schema maps to FieldDescriptor. Snap-ins don't support inputs of type date, timestamp or array of booleans. \nReference: https://docs.devrev.ai/snap-ins/references/inputs\n",
+            "properties": {
+                "organization": {
+                    "$ref": "#/$defs/inputs_properties"
+                },
+                "user": {
+                    "$ref": "#/$defs/inputs_properties"
+                }
+            }
+        },
+        "event_sources": {
+            "type": "object",
+            "description": "Event Sources are the sources, your should subscribe to receive events.\nReference: https://docs.devrev.ai/snap-ins/references/event_sources#supported-event-source-types-and-their-event-types\n",
+            "properties": {
+                "organization": {
+                    "$ref": "#/$defs/event_sources_properties"
+                },
+                "user": {
+                    "$ref": "#/$defs/event_sources_properties"
+                }
+            }
+        },
+        "hooks": {
+            "type": "array",
+            "description": "Hooks enable developers to invoke functions when various events in the lifecycle of a snap-in occur. \nThey can be used to validate inputs and keyrings, as well as to register, update, and deregister resources on external systems.\nHooks can be used to catch errors early in the deployment cycle of a snap-in and enable semantic validation.\nReference: https://docs.devrev.ai/snap-ins/references/hooks\n",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "validate",
+                            "activate",
+                            "deactivate",
+                            "update"
+                        ]
+                    },
+                    "function": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "type",
+                    "function"
+                ]
+            }
+        },
+        "tags": {
+            "type": "array",
+            "description": "Tags with the name provided will be created if they don't exist.\nReference: https://docs.devrev.ai/snap-ins/references/manifest#tags\n",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "$ref": "#/$defs/Name"
+                    },
+                    "description": {
+                        "$ref": "#/$defs/Description"
+                    }
+                },
+                "required": [
+                    "name",
+                    "description"
+                ]
+            }
+        },
+        "automations": {
+            "type": "array",
+            "description": "Automation refers to linking events from the event sources to your functions.\nReference: https://docs.devrev.ai/snap-ins/references/manifest#automations\n",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "$ref": "#/$defs/Name"
+                    },
+                    "source": {
+                        "type": "string"
+                    },
+                    "event_types": {
+                        "type": "array",
+                        "uniqueItems": true,
+                        "items": {
+                            "type": "string",
+                            "enum": [
+                                "account_created",
+                                "account_deleted",
+                                "account_updated",
+                                "conversation_created",
+                                "conversation_deleted",
+                                "conversation_updated",
+                                "dev_user_created",
+                                "dev_user_deleted",
+                                "dev_user_updated",
+                                "part_created",
+                                "part_deleted",
+                                "part_updated",
+                                "rev_org_created",
+                                "rev_org_deleted",
+                                "rev_org_updated",
+                                "rev_user_created",
+                                "rev_user_deleted",
+                                "rev_user_updated",
+                                "tag_created",
+                                "tag_deleted",
+                                "tag_updated",
+                                "timeline_entry_created",
+                                "timeline_entry_deleted",
+                                "timeline_entry_updated",
+                                "verify",
+                                "webhook_created",
+                                "webhook_deleted",
+                                "webhook_updated",
+                                "work_created",
+                                "work_deleted",
+                                "work_updated",
+                                "github.commit.new",
+                                "github.pull_request.open",
+                                "bitbucket.create.branch",
+                                "bitbucket.pullrequest.approved",
+                                "bitbucket.pullrequest.changes_request_created",
+                                "bitbucket.pullrequest.changes_request_removed",
+                                "bitbucket.pullrequest.comment_created",
+                                "bitbucket.pullrequest.comment_deleted",
+                                "bitbucket.pullrequest.comment_updated",
+                                "bitbucket.pullrequest.created",
+                                "bitbucket.pullrequest.fulfilled",
+                                "bitbucket.pullrequest.rejected",
+                                "bitbucket.pullrequest.unapproved",
+                                "bitbucket.pullrequest.updated",
+                                "bitbucket.push.branch",
+                                "gitlab.create.branch",
+                                "gitlab.push.branch",
+                                "gitlab.merge_request.open",
+                                "gitlab.merge_request.close",
+                                "gitlab.merge_request.reopen",
+                                "gitlab.merge_request.update",
+                                "gitlab.merge_request.approved",
+                                "gitlab.merge_request.unapproved",
+                                "gitlab.merge_request.approval",
+                                "gitlab.merge_request.unapproval",
+                                "gitlab.merge_request.merge",
+                                "gitlab.comment.commit",
+                                "gitlab.comment.merge_request",
+                                "gitlab.comment.issue",
+                                "gitlab.comment.snippet",
+                                "timer.tick",
+                                "email.receive",
+                                "slack.command",
+                                "slack.new-interaction",
+                                "slack.new-message-action",
+                                "datadog.monitor-event"
+                            ]
+                        }
+                    },
+                    "function": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "name",
+                    "source",
+                    "event_types",
+                    "function"
+                ]
+            }
+        },
+        "commands": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "$ref": "#/$defs/Name"
+                    },
+                    "description": {
+                        "$ref": "#/$defs/Description"
+                    },
+                    "namespace": {
+                        "type": "string"
+                    },
+                    "surfaces": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "surface": {
+                                    "type": "string",
+                                    "enum": [
+                                        "discussion"
+                                    ]
+                                },
+                                "object_types": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string",
+                                        "enum": [
+                                            "snap_in",
+                                            "ticket",
+                                            "issue"
+                                        ]
+                                    },
+                                    "uniqueItems": true
+                                }
+                            },
+                            "required": [
+                                "surface",
+                                "object_types"
+                            ]
+                        }
+                    },
+                    "usage_hint": {
+                        "type": "string"
+                    },
+                    "function": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "name",
+                    "description",
+                    "namespace",
+                    "surfaces",
+                    "usage_hint",
+                    "function"
+                ]
+            }
+        },
+        "snap_kit_actions": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "$ref": "#/$defs/Name"
+                    },
+                    "description": {
+                        "$ref": "#/$defs/Description"
+                    },
+                    "function": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "name",
+                    "description",
+                    "function"
+                ]
+            }
+        }
+    },
+    "required": [
+        "version",
+        "name",
+        "description",
+        "functions"
+    ]
+}
