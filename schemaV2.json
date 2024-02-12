@@ -6,7 +6,7 @@
             "type": "string",
             "minLength": 2,
             "maxLength": 60,
-            "pattern": "^[a-zA-Z0-9_]+$"
+            "pattern": "^[a-zA-Z0-9-_.]+$"
         },
         "Description": {
             "type": "string",
@@ -33,25 +33,60 @@
                         "items": {
                             "type": "string",
                             "enum": [
+                                "github-pat",
                                 "devrev-github-pat",
+                                "github-oauth",
                                 "devrev-github-oauth",
+                                "hubspot-pat",
+                                "devrev-hubspot-pat",
+                                "hubspot-oauth",
+                                "devrev-hubspot-oauth",
+                                "bitbucket-oauth",
                                 "devrev-bitbucket-oauth",
-                                "devrev-gitlab-pat",
+                                "stripe-token",
                                 "devrev-stripe-token",
+                                "sendgrid-api-key",
                                 "devrev-sendgrid-api-key",
+                                "clearbit-api-key",
                                 "devrev-clearbit-api-key",
+                                "flow-secret",
                                 "devrev-flow-secret",
+                                "datadog-keys",
                                 "devrev-datadog-keys",
+                                "slack-app",
                                 "devrev-slack-app",
+                                "discord-app",
                                 "devrev-discord-app",
+                                "google-oauth",
                                 "devrev-google-oauth",
+                                "domain-verification",
                                 "devrev-domain-verification",
+                                "intercom-oauth",
                                 "devrev-intercom-oauth",
+                                "pat",
                                 "devrev-pat",
+                                "gcp-json",
                                 "devrev-gcp-json",
+                                "jira-oauth",
                                 "devrev-jira-oauth",
+                                "confluence-oauth",
                                 "devrev-confluence-oauth",
-                                "devrev-google-calendar-oauth"
+                                "google-calendar-oauth",
+                                "devrev-google-calendar-oauth",
+                                "google-big-query-oauth",
+                                "devrev-google-big-query-oauth",
+                                "snap-in-secret",
+                                "devrev-snap-in-secret",
+                                "xero-oauth",
+                                "devrev-xero-oauth",
+                                "outreach-oauth",
+                                "devrev-outreach-oauth",
+                                "360-dialog-oauth",
+                                "devrev-360-dialog-oauth",
+                                "gainsight-api-key",
+                                "devrev-gainsight-api-key",
+                                "descope-secret",
+                                "devrev-descope-secret"
                             ]
                         }
                     }
@@ -91,13 +126,13 @@
                         ]
                     },
                     "is_required": {
-                        "type": "bool"
+                        "type": "boolean"
                     },
                     "default_value": {
                         "type": [
                             "string",
                             "number",
-                            "bool"
+                            "boolean"
                         ]
                     },
                     "ui": {
@@ -115,11 +150,10 @@
                         },
                         "additionalProperties": false,
                         "required": [
-                            "display_name",
-                            "placeholder"
+                            "display_name"
                         ]
                     },
-                    "enum": {
+                    "allowed_values": {
                         "type": "array",
                         "items": {
                             "type": "string"
@@ -158,7 +192,7 @@
                         },
                         "then": {
                             "required": [
-                                "enum"
+                                "allowed_values"
                             ]
                         }
                     },
@@ -172,7 +206,7 @@
                         },
                         "then": {
                             "required": [
-                                "enum"
+                                "allowed_values"
                             ]
                         }
                     },
@@ -234,6 +268,7 @@
                             "devrev-webhook",
                             "flow-events",
                             "timer-events",
+                            "track-events",
                             "flow-custom-webhook",
                             "betteruptime-incident-webhook",
                             "email-forward",
@@ -245,99 +280,125 @@
                             "datadog-monitor-events"
                         ]
                     },
-                    "repositories": {
-                        "items": {
-                            "type": "string"
-                        },
-                        "type": "array"
-                    },
-                    "events": {
-                        "items": {
-                            "type": "string"
-                        },
-                        "type": "array"
-                    },
-                    "workspace_id": {
-                        "type": "string"
-                    },
-                    "event_types": {
-                        "items": {
-                            "type": "string",
-                            "enum": [
-                                "account_created",
-                                "account_deleted",
-                                "account_updated",
-                                "conversation_created",
-                                "conversation_deleted",
-                                "conversation_updated",
-                                "dev_user_created",
-                                "dev_user_deleted",
-                                "dev_user_updated",
-                                "part_created",
-                                "part_deleted",
-                                "part_updated",
-                                "rev_org_created",
-                                "rev_org_deleted",
-                                "rev_org_updated",
-                                "rev_user_created",
-                                "rev_user_deleted",
-                                "rev_user_updated",
-                                "tag_created",
-                                "tag_deleted",
-                                "tag_updated",
-                                "timeline_entry_created",
-                                "timeline_entry_deleted",
-                                "timeline_entry_updated",
-                                "verify",
-                                "webhook_created",
-                                "webhook_deleted",
-                                "webhook_updated",
-                                "work_created",
-                                "work_deleted",
-                                "work_updated"
-                            ]
-                        },
-                        "type": "array"
-                    },
-                    "cron": {
-                        "type": "string",
-                        "description": "Cron schedule for the timer. Only minute granularity supported."
-                    },
-                    "interval_seconds": {
-                        "type": "integer"
-                    },
-                    "metadata": {
+                    "config": {
                         "type": "object",
-                        "description": "Optional json metadata which is set as the 'metadata' field of the event payload."
-                    },
-                    "Policy": {
-                        "type": "string"
-                    },
-                    "Parameters": {
-                        "type": "object"
-                    },
-                    "whitelist": {
-                        "items": {
-                            "type": "string"
+                        "properties": {
+                            "repositories": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            "events": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            "workspace_id": {
+                                "type": "string"
+                            },
+                            "event_types": {
+                                "items": {
+                                    "type": "string",
+                                    "enum": [
+                                        "account_created",
+                                        "account_deleted",
+                                        "account_updated",
+                                        "conversation_created",
+                                        "conversation_deleted",
+                                        "conversation_updated",
+                                        "dev_user_created",
+                                        "dev_user_deleted",
+                                        "dev_user_updated",
+                                        "link_created",
+                                        "link_updated",
+                                        "link_deleted",
+                                        "part_created",
+                                        "part_deleted",
+                                        "part_updated",
+                                        "rev_org_created",
+                                        "rev_org_deleted",
+                                        "rev_org_updated",
+                                        "rev_user_created",
+                                        "rev_user_deleted",
+                                        "rev_user_updated",
+                                        "tag_created",
+                                        "tag_deleted",
+                                        "tag_updated",
+                                        "timeline_entry_created",
+                                        "timeline_entry_deleted",
+                                        "timeline_entry_updated",
+                                        "verify",
+                                        "webhook_created",
+                                        "webhook_deleted",
+                                        "webhook_updated",
+                                        "work_created",
+                                        "work_deleted",
+                                        "work_updated"
+                                    ]
+                                },
+                                "type": "array"
+                            },
+                            "event_categories": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            "cron": {
+                                "type": "string",
+                                "description": "Cron schedule for the timer. Only minute granularity supported."
+                            },
+                            "interval_seconds": {
+                                "type": "integer"
+                            },
+                            "metadata": {
+                                "type": "object",
+                                "description": "Optional json metadata which is set as the 'metadata' field of the event payload."
+                            },
+                            "allow_events": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            "Policy": {
+                                "type": "string"
+                            },
+                            "Parameters": {
+                                "type": "object"
+                            },
+                            "whitelist": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            "allowlist": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            "handler_code": {
+                                "type": "string"
+                            },
+                            "monitors": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array",
+                                "description": "IDs of the monitors to register for events"
+                            }
                         },
-                        "type": "array"
-                    },
-                    "handler_code": {
-                        "type": "string"
-                    },
-                    "monitors": {
-                        "items": {
-                            "type": "string"
-                        },
-                        "type": "array",
-                        "description": "IDs of the monitors to register for events"
+                        "required": []
                     }
                 },
                 "required": [
                     "name",
                     "type",
-                    "description",
-                    "display_name"
+                    "description"
                 ],
                 "allOf": [
                     {
@@ -350,8 +411,7 @@
                         },
                         "then": {
                             "required": [
-                                "repositories",
-                                "events"
+                                "config"
                             ]
                         }
                     },
@@ -365,7 +425,7 @@
                         },
                         "then": {
                             "required": [
-                                "workspace_id"
+                                "config"
                             ]
                         }
                     },
@@ -379,8 +439,7 @@
                         },
                         "then": {
                             "required": [
-                                "repositories",
-                                "events"
+                                "config"
                             ]
                         }
                     },
@@ -394,7 +453,21 @@
                         },
                         "then": {
                             "required": [
-                                "event_types"
+                                "config"
+                            ]
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "type": {
+                                    "const": "track-events"
+                                }
+                            }
+                        },
+                        "then": {
+                            "required": [
+                                "config"
                             ]
                         }
                     },
@@ -408,8 +481,7 @@
                         },
                         "then": {
                             "required": [
-                                "Policy",
-                                "Parameters"
+                                "config"
                             ]
                         }
                     },
@@ -423,7 +495,7 @@
                         },
                         "then": {
                             "required": [
-                                "whitelist"
+                                "config"
                             ]
                         }
                     },
@@ -437,7 +509,7 @@
                         },
                         "then": {
                             "required": [
-                                "handler_code"
+                                "config"
                             ]
                         }
                     },
@@ -451,7 +523,7 @@
                         },
                         "then": {
                             "required": [
-                                "handler_code"
+                                "config"
                             ]
                         }
                     },
@@ -465,7 +537,7 @@
                         },
                         "then": {
                             "required": [
-                                "handler_code"
+                                "config"
                             ]
                         }
                     },
@@ -479,8 +551,210 @@
                         },
                         "then": {
                             "required": [
-                                "monitors"
+                                "config"
                             ]
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "type": {
+                                    "const": "github-webhook"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "config": {
+                                    "required": [
+                                        "repositories",
+                                        "events"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "type": {
+                                    "const": "bitbucket-webhook"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "config": {
+                                    "required": [
+                                        "workspace_id"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "type": {
+                                    "const": "gitlab-webhook"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "config": {
+                                    "required": [
+                                        "repositories",
+                                        "events"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "type": {
+                                    "const": "devrev-webhook"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "config": {
+                                    "required": [
+                                        "event_types"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "type": {
+                                    "const": "track-events"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "config": {
+                                    "required": [
+                                        "allow_events"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "type": {
+                                    "const": "flow-custom-webhook"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "config": {
+                                    "required": [
+                                        "Policy",
+                                        "Parameters"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "type": {
+                                    "const": "email-forward"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "config": {
+                                    "required": [
+                                        "whitelist",
+                                        "allowlist"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "type": {
+                                    "const": "slack-app-commands"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "config": {
+                                    "required": [
+                                        "handler_code"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "type": {
+                                    "const": "slack-app-interactions"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "config": {
+                                    "required": [
+                                        "handler_code"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "type": {
+                                    "const": "slack-app-message-actions"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "config": {
+                                    "required": [
+                                        "handler_code"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "type": {
+                                    "const": "datadog-monitor-events"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "config": {
+                                    "required": [
+                                        "monitors"
+                                    ]
+                                }
+                            }
                         }
                     }
                 ]
@@ -638,74 +912,84 @@
                         "uniqueItems": true,
                         "items": {
                             "type": "string",
-                            "enum": [
-                                "account_created",
-                                "account_deleted",
-                                "account_updated",
-                                "conversation_created",
-                                "conversation_deleted",
-                                "conversation_updated",
-                                "dev_user_created",
-                                "dev_user_deleted",
-                                "dev_user_updated",
-                                "part_created",
-                                "part_deleted",
-                                "part_updated",
-                                "rev_org_created",
-                                "rev_org_deleted",
-                                "rev_org_updated",
-                                "rev_user_created",
-                                "rev_user_deleted",
-                                "rev_user_updated",
-                                "tag_created",
-                                "tag_deleted",
-                                "tag_updated",
-                                "timeline_entry_created",
-                                "timeline_entry_deleted",
-                                "timeline_entry_updated",
-                                "verify",
-                                "webhook_created",
-                                "webhook_deleted",
-                                "webhook_updated",
-                                "work_created",
-                                "work_deleted",
-                                "work_updated",
-                                "github.commit.new",
-                                "github.pull_request.open",
-                                "bitbucket.create.branch",
-                                "bitbucket.pullrequest.approved",
-                                "bitbucket.pullrequest.changes_request_created",
-                                "bitbucket.pullrequest.changes_request_removed",
-                                "bitbucket.pullrequest.comment_created",
-                                "bitbucket.pullrequest.comment_deleted",
-                                "bitbucket.pullrequest.comment_updated",
-                                "bitbucket.pullrequest.created",
-                                "bitbucket.pullrequest.fulfilled",
-                                "bitbucket.pullrequest.rejected",
-                                "bitbucket.pullrequest.unapproved",
-                                "bitbucket.pullrequest.updated",
-                                "bitbucket.push.branch",
-                                "gitlab.create.branch",
-                                "gitlab.push.branch",
-                                "gitlab.merge_request.open",
-                                "gitlab.merge_request.close",
-                                "gitlab.merge_request.reopen",
-                                "gitlab.merge_request.update",
-                                "gitlab.merge_request.approved",
-                                "gitlab.merge_request.unapproved",
-                                "gitlab.merge_request.approval",
-                                "gitlab.merge_request.unapproval",
-                                "gitlab.merge_request.merge",
-                                "gitlab.comment.commit",
-                                "gitlab.comment.merge_request",
-                                "gitlab.comment.issue",
-                                "gitlab.comment.snippet",
-                                "timer.tick",
-                                "email.receive",
-                                "slack.command",
-                                "slack.new-interaction",
-                                "slack.new-message-action",
-                                "datadog.monitor-event"
+                            "anyOf": [
+                                {
+                                    "enum": [
+                                        "account_created",
+                                        "account_deleted",
+                                        "account_updated",
+                                        "conversation_created",
+                                        "conversation_deleted",
+                                        "conversation_updated",
+                                        "dev_user_created",
+                                        "dev_user_deleted",
+                                        "dev_user_updated",
+                                        "link_created",
+                                        "link_updated",
+                                        "link_deleted",
+                                        "part_created",
+                                        "part_deleted",
+                                        "part_updated",
+                                        "rev_org_created",
+                                        "rev_org_deleted",
+                                        "rev_org_updated",
+                                        "rev_user_created",
+                                        "rev_user_deleted",
+                                        "rev_user_updated",
+                                        "tag_created",
+                                        "tag_deleted",
+                                        "tag_updated",
+                                        "timeline_entry_created",
+                                        "timeline_entry_deleted",
+                                        "timeline_entry_updated",
+                                        "verify",
+                                        "webhook_created",
+                                        "webhook_deleted",
+                                        "webhook_updated",
+                                        "work_created",
+                                        "work_deleted",
+                                        "work_updated",
+                                        "github.commit.new",
+                                        "github.pull_request.open",
+                                        "bitbucket.create.branch",
+                                        "bitbucket.pullrequest.approved",
+                                        "bitbucket.pullrequest.changes_request_created",
+                                        "bitbucket.pullrequest.changes_request_removed",
+                                        "bitbucket.pullrequest.comment_created",
+                                        "bitbucket.pullrequest.comment_deleted",
+                                        "bitbucket.pullrequest.comment_updated",
+                                        "bitbucket.pullrequest.created",
+                                        "bitbucket.pullrequest.fulfilled",
+                                        "bitbucket.pullrequest.rejected",
+                                        "bitbucket.pullrequest.unapproved",
+                                        "bitbucket.pullrequest.updated",
+                                        "bitbucket.push.branch",
+                                        "gitlab.create.branch",
+                                        "gitlab.push.branch",
+                                        "gitlab.merge_request.open",
+                                        "gitlab.merge_request.close",
+                                        "gitlab.merge_request.reopen",
+                                        "gitlab.merge_request.update",
+                                        "gitlab.merge_request.approved",
+                                        "gitlab.merge_request.unapproved",
+                                        "gitlab.merge_request.approval",
+                                        "gitlab.merge_request.unapproval",
+                                        "gitlab.merge_request.merge",
+                                        "gitlab.comment.commit",
+                                        "gitlab.comment.merge_request",
+                                        "gitlab.comment.issue",
+                                        "gitlab.comment.snippet",
+                                        "timer.tick",
+                                        "email.receive",
+                                        "slack.command",
+                                        "slack.new-interaction",
+                                        "slack.new-message-action",
+                                        "datadog.monitor-event"
+                                    ]
+                                },
+                                {
+                                    "pattern": "^custom:"
+                                }
                             ]
                         }
                     },
