@@ -1027,7 +1027,7 @@
                                 "surface": {
                                     "type": "string",
                                     "enum": [
-                                        "discussion"
+                                        "discussions"
                                     ]
                                 },
                                 "object_types": {
