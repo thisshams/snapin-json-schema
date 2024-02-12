@@ -1,5 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "DevRev Snap-In",
+    "description": "Add-on modules for DevRev, called snap-ins.",
     "type": "object",
     "$defs": {
         "Name": {
